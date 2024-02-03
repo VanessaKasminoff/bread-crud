@@ -16,5 +16,5 @@ app.use('/breads', breadsController)
 
 //listening
 app.listen(PORT, () => {
-    console.log(`Wittle server running on port ${PORT}`)
+    console.log(`Little server running on port ${PORT}`)
 })
