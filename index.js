@@ -1,14 +1,20 @@
 //Gets environment variables
 require('dotenv').config()
-
 const PORT = process.env.PORT
+console.log(PORT)
 
 const app = require('express')()
 
+//home route
 app.get('/', (req, res) => {
-    res.send('BREAD CRUD')
+    res.send('Welcome to the the best app about BREAD!')
 })
 
+//breads route
+const breadsController = require('./controllers/breads_controller.js')
+app.use('/breads', breadsController)
+
+//listening
 app.listen(PORT, () => {
-    console.log('Wittle server running on port 3000')
+    console.log(`Wittle server running on port ${PORT}`)
 })
