@@ -3,7 +3,11 @@ require('dotenv').config()
 const PORT = process.env.PORT
 console.log(PORT)
 
-const app = require('express')()
+const express = require('express')
+const app = express()
+
+//middleware
+app.use(express.static('public'))
 
 //home route
 app.get('/', (req, res) => {
@@ -16,5 +20,5 @@ app.use('/breads', breadsController)
 
 //listening
 app.listen(PORT, () => {
-    console.log(`Little server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`)
 })
