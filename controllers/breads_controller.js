@@ -13,7 +13,11 @@ router.get('/', (req, res) => {
 
 //sends the index of the bread.js data
 router.get('/:arrayIndex', (req, res) => {
-    res.send(render('Show', {bread: Bread[req.params.arrayIndex]}))
+    if (Bread[req.params.arrayIndex]) {
+        res.send(render('Show', {bread: Bread[req.params.arrayIndex]}))
+    } else {
+        res.status(404).send('404')
+    }
 })
 
 module.exports = router
