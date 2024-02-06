@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+
 const render = require('../render')
 
 //import model bread data
@@ -12,6 +13,7 @@ router.get('/', (req, res) => {
 
 //sends the index of the bread.js data
 router.get('/:arrayIndex', (req, res) => {
+    res.send(render('Show', {bread: Bread[req.params.arrayIndex]}))
     res.send(Bread[req.params.arrayIndex])
 })
 
