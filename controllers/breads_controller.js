@@ -28,12 +28,6 @@ router.get('/:arrayIndex', (req, res) => {
     }
 })
 
-//delete route
-router.delete('/:arrayIndex', (req, res) => {
-    Bread.splice(req.params.arrayIndex, 1)
-    res.status(303).redirect('/breads')
-})
-
 //create route
 router.post('/', (req, res) => {
     if (!req.body.image) {
@@ -46,6 +40,23 @@ router.post('/', (req, res) => {
     }
     Bread.push(req.body)
     res.redirect('/breads')
+})
+
+//update route
+router.put('/:arrayIndex', (req, res) => {
+    if (req.body.hasGluten === 'on') {
+        req.body.hasGluten = true
+    } else {
+        req.body.hasGluten = false
+    }
+    Bread[req.params.arrayIndex] = req.body
+    res.redirect(`/breads/${req.params.arrayIndex}`)
+})
+
+//delete route
+router.delete('/:arrayIndex', (req, res) => {
+    Bread.splice(req.params.arrayIndex, 1)
+    res.status(303).redirect('/breads')
 })
 
 module.exports = router

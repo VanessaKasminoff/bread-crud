@@ -5,6 +5,7 @@ const Default = (html) => {
         <html>
             <head>
                 <title>BreadCRUD</title>
+                <link rel='shortcut icon' type='image/jpg' href='/images/favicon.svg' />
                 <link 
                 rel="stylesheet" 
                 href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" 
