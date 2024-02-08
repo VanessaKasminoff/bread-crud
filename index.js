@@ -4,11 +4,13 @@ const PORT = process.env.PORT
 console.log(PORT)
 
 const express = require('express')
+const methodOverride = require('method-override')
 const app = express()
 
 //middleware
 app.use(express.static('public'))
 app.use(express.urlencoded({extended: true}))
+app.use(methodOverride('_method'))
 
 //home route
 app.get('/', (req, res) => {

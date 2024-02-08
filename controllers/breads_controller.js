@@ -19,10 +19,19 @@ router.get('/new', (req, res) => {
 //details route
 router.get('/:arrayIndex', (req, res) => {
     if (Bread[req.params.arrayIndex]) {
-        res.send(render('Show', {bread: Bread[req.params.arrayIndex]}))
+        res.send(render('Show', {
+            bread: Bread[req.params.arrayIndex], 
+            index: req.params.arrayIndex
+        }))
     } else {
         res.status(404).send('404')
     }
+})
+
+//delete route
+router.delete('/:arrayIndex', (req, res) => {
+    Bread.splice(req.params.arrayIndex, 1)
+    res.status(303).redirect('/breads')
 })
 
 //create route
