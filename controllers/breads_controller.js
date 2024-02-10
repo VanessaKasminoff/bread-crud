@@ -53,6 +53,14 @@ router.put('/:arrayIndex', (req, res) => {
     res.redirect(`/breads/${req.params.arrayIndex}`)
 })
 
+//edit route form
+router.get('/:arrayIndex/edit', (req, res) => {
+    res.send(render('Edit', {
+        bread: Bread[req.params.arrayIndex],
+        index: req.params.arrayIndex
+    }))
+})
+
 //delete route
 router.delete('/:arrayIndex', (req, res) => {
     Bread.splice(req.params.arrayIndex, 1)
