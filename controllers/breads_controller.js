@@ -8,7 +8,11 @@ const Bread = require('../models/bread.js')
 
 //breads route
 router.get('/', (req, res) => {
-    res.send(render('Index', {breads: Bread}))
+    // res.send(render('Index', {breads: Bread}))
+    Bread.find().then((breads) => {
+        // console.log(breads)
+        res.send(render('Index', {breads: breads}))
+    })
 })
 
 //new route
@@ -17,28 +21,33 @@ router.get('/new', (req, res) => {
 })
 
 //details route
-router.get('/:arrayIndex', (req, res) => {
-    if (Bread[req.params.arrayIndex]) {
-        res.send(render('Show', {
-            bread: Bread[req.params.arrayIndex], 
-            index: req.params.arrayIndex
-        }))
-    } else {
-        res.status(404).send('404')
-    }
+router.get('/:id', (req, res) => {
+    Bread.findById(req.params.id).then((bread) => {
+        res.send(render('Show', {bread: bread}))
+    }).catch((err) => {
+        res.status(404).send('404: Unable to find bread')
+    })
+    // if (Bread[req.params.arrayIndex]) {
+    //     res.send(render('Show', {
+    //         bread: Bread[req.params.arrayIndex], 
+    //         index: req.params.arrayIndex
+    //     }))
+    // } else {
+    //     res.status(404).send('404')
+    // }
 })
 
 //create route
 router.post('/', (req, res) => {
     if (!req.body.image) {
-        req.body.image = 'https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80'
+        req.body.image = undefined
     }
     if (req.body.hasGluten === 'on') {
         req.body.hasGluten = true
     } else {
         req.body.hasGluten = false
     }
-    Bread.push(req.body)
+    Bread.create(req.body)
     res.redirect('/breads')
 })
 
