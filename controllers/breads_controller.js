@@ -16,6 +16,16 @@ router.get('/', (req, res) => {
     })
 })
 
+//list route for baker
+router.get('/bakers/:baker', (req, res) => {
+    Bread.findByBaker(req.params.baker).then((breads) => {
+        res.send(render('Index', {breads: breads}))
+    }).catch((err) => {
+        console.log('err', err)
+        res.status(404).send('404')
+    })
+})
+
 //new route
 router.get('/new', (req, res) => {
     res.send(render('New'))
@@ -24,6 +34,7 @@ router.get('/new', (req, res) => {
 //details route
 router.get('/:id', (req, res) => {
     Bread.findById(req.params.id).then((bread) => {
+        console.log(bread.getBakedBy())
         res.send(render('Show', {bread: bread}))
     }).catch((err) => {
         console.log('err', err)
