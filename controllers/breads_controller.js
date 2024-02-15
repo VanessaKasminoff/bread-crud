@@ -8,10 +8,11 @@ const Bread = require('../models/bread.js')
 
 //breads route
 router.get('/', (req, res) => {
-    // res.send(render('Index', {breads: Bread}))
     Bread.find().then((breads) => {
-        // console.log(breads)
         res.send(render('Index', {breads: breads}))
+    }).catch((err) => {
+        console.log('err', err)
+        res.status(404).send('404')
     })
 })
 
@@ -25,16 +26,9 @@ router.get('/:id', (req, res) => {
     Bread.findById(req.params.id).then((bread) => {
         res.send(render('Show', {bread: bread}))
     }).catch((err) => {
+        console.log('err', err)
         res.status(404).send('404: Unable to find bread')
     })
-    // if (Bread[req.params.arrayIndex]) {
-    //     res.send(render('Show', {
-    //         bread: Bread[req.params.arrayIndex], 
-    //         index: req.params.arrayIndex
-    //     }))
-    // } else {
-    //     res.status(404).send('404')
-    // }
 })
 
 //create route
@@ -52,28 +46,43 @@ router.post('/', (req, res) => {
 })
 
 //update route
-router.put('/:arrayIndex', (req, res) => {
+router.put('/:id', (req, res) => {
+    if (!req.body.image) {
+        req.body.image = undefined
+    }
     if (req.body.hasGluten === 'on') {
         req.body.hasGluten = true
     } else {
         req.body.hasGluten = false
     }
-    Bread[req.params.arrayIndex] = req.body
-    res.redirect(`/breads/${req.params.arrayIndex}`)
+    Bread.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    .then((updatedBread) => {
+        console.log(updatedBread)
+        res.redirect(`/breads/${req.params.id}`)
+    }).catch((err) => {
+        console.log('err', err)
+        res.status(404).send('404')
+    })
 })
 
 //edit route form
-router.get('/:arrayIndex/edit', (req, res) => {
-    res.send(render('Edit', {
-        bread: Bread[req.params.arrayIndex],
-        index: req.params.arrayIndex
-    }))
+router.get('/:id/edit', (req, res) => {
+    Bread.findById(req.params.id).then((foundBread) => {
+        res.send(render('edit', {bread: foundBread}))
+    }).catch((err) => {
+        console.log('err', err)
+        res.status(404).send('404')
+    })
 })
 
 //delete route
-router.delete('/:arrayIndex', (req, res) => {
-    Bread.splice(req.params.arrayIndex, 1)
-    res.status(303).redirect('/breads')
+router.delete('/:id', (req, res) => {
+    Bread.findByIdAndDelete(req.params.id).then((deletedBread) => {
+        res.status(303).redirect('/breads')
+    }).catch((err) => {
+        console.log('err', err)
+        res.status(404).send('404')
+    })
 })
 
 module.exports = router

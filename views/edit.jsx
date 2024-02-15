@@ -1,11 +1,11 @@
 const React = require('react')
 const Default = require('./layouts/default.jsx')
 
-const Edit = ({bread, index}) => {
+const Edit = ({bread}) => {
     return (
         <Default>
              <h2>Edit a Bread</h2>
-            <form action={`/breads/${index}?_method=PUT`} method='POST'>
+            <form action={`/breads/${bread.id}?_method=PUT`} method='POST'>
                 <label htmlFor='name'>Name</label>
                 <input type='text' name='name' id='name' required defaultValue={bread.name}/>
                 <label htmlFor='image'>Image</label>
@@ -16,7 +16,7 @@ const Edit = ({bread, index}) => {
                 <input type='submit' />
             </form>
             <div className="backButton">
-                <a href={`/breads/${index}`}><button>Cancel</button></a>
+                <a href={`/breads/${bread.id}`}><button>Cancel</button></a>
             </div>
         </Default>
     )
