@@ -13,7 +13,7 @@ const breadSchema = new Schema({
 
 //helper methods
 breadSchema.method('getBakedBy', function() {
-  return `${this.name} was baked with love by ${this.baker}`
+  return `${this.name} was baked with love by ${this.baker.name}, who has been with us since ${this.baker.startDate.getFullYear()}`
 })
 
 breadSchema.static('findByBaker', function(baker) {

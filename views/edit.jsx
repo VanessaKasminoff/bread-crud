@@ -1,7 +1,7 @@
 const React = require('react')
 const Default = require('./layouts/default.jsx')
 
-const Edit = ({bread}) => {
+const Edit = ({bread, bakers}) => {
     return (
         <Default>
              <h2>Edit a Bread</h2>
@@ -13,12 +13,11 @@ const Edit = ({bread}) => {
                 <label htmlFor='baker'>Baker</label>
                 <select name='baker' id='baker' required defaultValue={bread.baker}>
                     <option value=''>--Select a Baker--</option>
-                    <option value='Rachel'>Rachel</option>
-                    <option value='Monica'>Monica</option>
-                    <option value='Joey'>Joey</option>
-                    <option value='Chandler'>Chandler</option>
-                    <option value='Ross'>Ross</option>
-                    <option value='Phoebe'>Phoebe</option>
+                    {bakers.map((baker) => {
+                        return (
+                            <option key={baker.id} value={baker.id}>{baker.name}</option>
+                        )
+                    })}
                 </select>
                 <label htmlFor='hasGluten'>Has Gluten?</label>
                 <input type='checkbox' name='hasGluten' id='hasGluten' defaultChecked={bread.hasGluten} />

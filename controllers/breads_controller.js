@@ -1,9 +1,9 @@
+//dependencies
 const express = require('express')
 const router = express.Router()
-
 const render = require('../render')
 
-//import model bread data
+//import models
 const Bread = require('../models/bread.js')
 const Baker = require('../models/baker.js')
 
@@ -36,8 +36,9 @@ router.get('/new', (req, res) => {
 
 //details route
 router.get('/:id', (req, res) => {
-    Bread.findById(req.params.id).then((bread) => {
-        console.log(bread.getBakedBy())
+    Bread.findById(req.params.id)
+    .populate('baker')
+    .then((bread) => {
         res.send(render('Show', {bread: bread}))
     }).catch((err) => {
         console.log('err', err)
@@ -81,12 +82,17 @@ router.put('/:id', (req, res) => {
 
 //edit route form
 router.get('/:id/edit', (req, res) => {
-    Bread.findById(req.params.id).then((foundBread) => {
-        res.send(render('edit', {bread: foundBread}))
-    }).catch((err) => {
-        console.log('err', err)
-        res.status(404).send('404')
-    })
+    Bread.findById(req.params.id)
+        .then((foundBread) => {
+            Baker.find()
+                .then((bakers) => {
+                    res.send(render('edit', {bread: foundBread, bakers: bakers}))
+                })
+        })
+        .catch((err) => {
+            console.log('err', err)
+            res.status(404).send('404')
+        })
 })
 
 //delete route
