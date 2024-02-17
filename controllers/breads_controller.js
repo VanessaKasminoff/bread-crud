@@ -5,6 +5,7 @@ const render = require('../render')
 
 //import model bread data
 const Bread = require('../models/bread.js')
+const Baker = require('../models/baker.js')
 
 //breads route
 router.get('/', (req, res) => {
@@ -28,7 +29,9 @@ router.get('/bakers/:baker', (req, res) => {
 
 //new route
 router.get('/new', (req, res) => {
-    res.send(render('New'))
+    Baker.find().then((bakers) => {
+        res.send(render('New', {bakers: bakers}))
+    })
 })
 
 //details route
