@@ -1,108 +1,123 @@
 //dependencies
-const express = require('express')
-const router = express.Router()
-const render = require('../render')
+const express = require("express");
+const router = express.Router();
+const render = require("../render");
 
 //import models
-const Bread = require('../models/bread.js')
-const Baker = require('../models/baker.js')
+const Bread = require("../models/bread.js");
+const Baker = require("../models/baker.js");
 
 //breads route
-router.get('/', (req, res) => {
-    Bread.find().then((breads) => {
-        res.send(render('Index', {breads: breads}))
-    }).catch((err) => {
-        console.log('err', err)
-        res.status(404).send('404')
+router.get("/", (req, res) => {
+  Baker.find()
+    .then((bakers) => {
+      Bread.find().then((breads) => {
+        res.send(
+          render("Index", {
+            breads: breads,
+            bakers: bakers,
+            title: "Index Page",
+          })
+        );
+      });
     })
-})
+    .catch((err) => {
+      console.log("err", err);
+      res.status(404).send("404");
+    });
+});
 
 //list route for baker
-router.get('/bakers/:baker', (req, res) => {
-    Bread.findByBaker(req.params.baker).then((breads) => {
-        res.send(render('Index', {breads: breads}))
-    }).catch((err) => {
-        console.log('err', err)
-        res.status(404).send('404')
+router.get("/bakers/:baker", (req, res) => {
+  Bread.findByBaker(req.params.baker)
+    .then((breads) => {
+      res.send(render("Index", { breads: breads }));
     })
-})
+    .catch((err) => {
+      console.log("err", err);
+      res.status(404).send("404");
+    });
+});
 
 //new route
-router.get('/new', (req, res) => {
-    Baker.find().then((bakers) => {
-        res.send(render('New', {bakers: bakers}))
-    })
-})
+router.get("/new", (req, res) => {
+  Baker.find().then((bakers) => {
+    res.send(render("New", { bakers: bakers }));
+  });
+});
 
 //details route
-router.get('/:id', (req, res) => {
-    Bread.findById(req.params.id)
-    .populate('baker')
+router.get("/:id", (req, res) => {
+  Bread.findById(req.params.id)
+    .populate("baker")
     .then((bread) => {
-        res.send(render('Show', {bread: bread}))
-    }).catch((err) => {
-        console.log('err', err)
-        res.status(404).send('404: Unable to find bread')
+      res.send(render("Show", { bread: bread }));
     })
-})
+    .catch((err) => {
+      console.log("err", err);
+      res.status(404).send("404: Unable to find bread");
+    });
+});
 
 //create route
-router.post('/', (req, res) => {
-    if (!req.body.image) {
-        req.body.image = undefined
-    }
-    if (req.body.hasGluten === 'on') {
-        req.body.hasGluten = true
-    } else {
-        req.body.hasGluten = false
-    }
-    Bread.create(req.body)
-    res.redirect('/breads')
-})
+router.post("/", (req, res) => {
+  if (!req.body.image) {
+    req.body.image = undefined;
+  }
+  if (req.body.hasGluten === "on") {
+    req.body.hasGluten = true;
+  } else {
+    req.body.hasGluten = false;
+  }
+  Bread.create(req.body);
+  res.redirect("/breads");
+});
 
 //update route
-router.put('/:id', (req, res) => {
-    if (!req.body.image) {
-        req.body.image = undefined
-    }
-    if (req.body.hasGluten === 'on') {
-        req.body.hasGluten = true
-    } else {
-        req.body.hasGluten = false
-    }
-    Bread.findByIdAndUpdate(req.params.id, req.body, {new: true})
+router.put("/:id", (req, res) => {
+  if (!req.body.image) {
+    req.body.image = undefined;
+  }
+  if (req.body.hasGluten === "on") {
+    req.body.hasGluten = true;
+  } else {
+    req.body.hasGluten = false;
+  }
+  Bread.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then((updatedBread) => {
-        console.log(updatedBread)
-        res.redirect(`/breads/${req.params.id}`)
-    }).catch((err) => {
-        console.log('err', err)
-        res.status(404).send('404')
+      console.log(updatedBread);
+      res.redirect(`/breads/${req.params.id}`);
     })
-})
+    .catch((err) => {
+      console.log("err", err);
+      res.status(404).send("404");
+    });
+});
 
 //edit route form
-router.get('/:id/edit', (req, res) => {
-    Bread.findById(req.params.id)
-        .then((foundBread) => {
-            Baker.find()
-                .then((bakers) => {
-                    res.send(render('edit', {bread: foundBread, bakers: bakers}))
-                })
-        })
-        .catch((err) => {
-            console.log('err', err)
-            res.status(404).send('404')
-        })
-})
+router.get("/:id/edit", (req, res) => {
+  Bread.findById(req.params.id)
+    .then((foundBread) => {
+      Baker.find().then((bakers) => {
+        res.send(render("edit", { bread: foundBread, bakers: bakers }));
+      });
+    })
+    .catch((err) => {
+      console.log("err", err);
+      res.status(404).send("404");
+    });
+});
 
 //delete route
-router.delete('/:id', (req, res) => {
-    Bread.findByIdAndDelete(req.params.id).then((deletedBread) => {
-        res.status(303).redirect('/breads')
-    }).catch((err) => {
-        console.log('err', err)
-        res.status(404).send('404')
+router.delete("/:id", (req, res) => {
+  Bread.findByIdAndDelete(req.params.id)
+    .then((deletedBread) => {
+      res.status(303).redirect("/breads");
     })
-})
+    .catch((err) => {
+      console.log("err", err);
+      res.status(404).send("404");
+    });
+});
 
-module.exports = router
+module.exports = router;

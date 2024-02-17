@@ -15,4 +15,16 @@ router.get('/', (req,res) => {
         })
 })
 
+router.get('/:id', (req, res) => {
+    Baker.findById(req.params.id)
+    .populate('breads')
+    .then((baker) => {
+        res.send(render('baker-show', {baker: baker}))
+    })
+    .catch(err => {
+        console.log('err', err)
+        res.status(404).send('404')
+    })
+})
+
 module.exports = router
