@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     const bakers = await Baker.find()
     const breads = await Bread.find().limit(3)
 
-    res.send(render('Index', {breads: breads, bakers: bakers, title: 'Index Page'}))
+    res.send(render('index', {breads: breads, bakers: bakers, title: 'Index Page'}))
   } catch (err) {
     res.status(404).send("404" + err)
   }
@@ -40,7 +40,7 @@ router.get("/bakers/:baker", async (req, res) => {
   try {
     let breads = await Bread.findByBaker(req.params.baker)
 
-    res.send(render('Index', {bread: breads}))
+    res.send(render('index', {bread: breads}))
   } catch (err) {
     res.status(404).send('404' + err)
   }
@@ -57,7 +57,7 @@ router.get("/bakers/:baker", async (req, res) => {
 //new route
 router.get("/new", async (req, res) => {
     let bakers = await Baker.find()
-    res.send(render('New', {bakers: bakers}))
+    res.send(render('new', {bakers: bakers}))
 
   // Baker.find().then((bakers) => {
   //   res.send(render("New", { bakers: bakers }));
@@ -69,7 +69,7 @@ router.get("/:id", async (req, res) => {
   try {
     let bread = await Bread.findById(req.params.id).populate('baker')
 
-    res.send(render('Show', {bread: bread}))
+    res.send(render('show', {bread: bread}))
   } catch (err) {
     res.status(404).send("404: Unable to find bread")
   }
