@@ -27,4 +27,12 @@ router.get('/:id', (req, res) => {
     })
 })
 
+//delete
+router.delete('/:id', (req, res) => {
+    Baker.findByIdAndDelete(req.params.id)
+    .then((deletedBaker) => {
+        res.status(303).redirect('/breads')
+    })
+})
+
 module.exports = router
